@@ -61,15 +61,6 @@ public class VirtualFile {
         return this;
     }
 
-    public long getUseTime() {
-        Date uploadEndTime = this.getUploadEndTime();
-        Date uploadStartTime = this.getUploadStartTime();
-        if (null == uploadStartTime || null == uploadEndTime) {
-            return -1;
-        }
-        return uploadEndTime.getTime() - uploadStartTime.getTime();
-    }
-
     public VirtualFile setSize(long size) {
         this.size = size;
         return this;

@@ -13,12 +13,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Date;
 
-
 public class AliyunOssApiClient extends BaseApiClient {
 
-    /**
-     *
-     */
     private OssApi ossApi;
 
     /**
@@ -61,14 +57,12 @@ public class AliyunOssApiClient extends BaseApiClient {
     @Override
     public VirtualFile uploadFile(InputStream is, String pathPrefix, String fileName)  throws GlobalFileException {
         this.check();
-
-        String key = FileUtil.generateTempFileName(fileName);
-        this.createNewFileName(key, pathPrefix);
+        this.createNewFileName(pathPrefix, fileName);
         try {
             Date startTime = new Date();
             ossApi.uploadFile(is, this.newFileName, bucketName);
             return new VirtualFile()
-                    .setOriginalFileName(FileUtil.getName(key))
+                    .setOriginalFileName(fileName)
                     .setSuffix(this.suffix)
                     .setUploadStartTime(startTime)
                     .setUploadEndTime(new Date())
@@ -91,13 +85,12 @@ public class AliyunOssApiClient extends BaseApiClient {
     @Override
     public VirtualFile uploadFile(InputStream is, String pathPrefix, String fileName, IProgressListener listener)  throws GlobalFileException{
         this.check();
-        String key = FileUtil.generateTempFileName(fileName);
-        this.createNewFileName(pathPrefix, key);
+        this.createNewFileName(pathPrefix, fileName);
         try {
             Date startTime = new Date();
             ossApi.uploadFile(is, this.newFileName, bucketName, listener);
             return new VirtualFile()
-                    .setOriginalFileName(FileUtil.getName(key))
+                    .setOriginalFileName(fileName)
                     .setSuffix(this.suffix)
                     .setUploadStartTime(startTime)
                     .setUploadEndTime(new Date())

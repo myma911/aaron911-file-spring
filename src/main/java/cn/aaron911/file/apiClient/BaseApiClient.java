@@ -31,7 +31,7 @@ public abstract class BaseApiClient implements IApiClient {
             throw new OssApiException("[" + this.storageType + "]文件上传失败：文件不可为空");
         }
         try {
-            VirtualFile res = this.uploadFile(multipartFile.getInputStream(), multipartFile.getOriginalFilename(), pathPrefix);
+            VirtualFile res = this.uploadFile(multipartFile.getInputStream(), pathPrefix, multipartFile.getOriginalFilename());
             return res.setSize(multipartFile.getSize()).setOriginalFileName(multipartFile.getOriginalFilename());
         } catch (IOException e) {
             throw new GlobalFileException("[" + this.storageType + "]文件上传失败：" + e.getMessage());
@@ -55,6 +55,9 @@ public abstract class BaseApiClient implements IApiClient {
     }
 
     protected void createNewFileName(String pathPrefix, String fileName) {
+        if(!pathPrefix.endsWith("/")){
+            pathPrefix = pathPrefix + "/";
+        }
         this.suffix = FileUtil.getSuffix(fileName);
         String newfileName = DateUtil.format(new Date(), "yyyyMMddHHmmssSSS") + "_" + IdUtil.fastSimpleUUID();
         this.newFileName = pathPrefix + (newfileName + this.suffix);
